@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ModeToggle } from "@/components/mode-toggle"
+import { Header } from "@/components/header"
 
 export const Route = createRootRoute({
   head: () => ({
@@ -47,10 +48,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <ThemeProvider  defaultTheme="system" storageKey="dark">
           <SidebarProvider>
-           <ModeToggle />
           <AppSidebar />
-            <main>
-              <SidebarTrigger />
+            <main className="w-full">
+              <Header>
+                <SidebarTrigger />
+                <ModeToggle />
+              </Header>
               {children}
             </main>
           </SidebarProvider>
