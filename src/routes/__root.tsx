@@ -1,17 +1,22 @@
-import { QueryClient } from "@tanstack/react-query"
-import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
-import { TanStackDevtools } from "@tanstack/react-devtools"
+import { QueryClient } from "@tanstack/react-query";
+import {
+  HeadContent,
+  Scripts,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { TanStackDevtools } from "@tanstack/react-devtools";
 
-import appCss from "../styles.css?url"
-import { ThemeProvider } from "@/components/theme-provider"
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { ModeToggle } from "@/components/mode-toggle"
-import { Header } from "@/components/header"
+import appCss from "../styles.css?url";
+import { ThemeProvider } from "@/components/theme-provider";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Header } from "@/components/header";
 
 export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;}>()({
+  queryClient: QueryClient;
+}>()({
   head: () => ({
     meta: [
       {
@@ -39,7 +44,7 @@ export const Route = createRootRouteWithContext<{
     </main>
   ),
   shellComponent: RootDocument,
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -48,9 +53,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider  defaultTheme="system" storageKey="dark">
+        <ThemeProvider defaultTheme="system" storageKey="dark">
           <SidebarProvider>
-          <AppSidebar />
+            <AppSidebar />
             <main className="w-full">
               <Header>
                 <SidebarTrigger />
@@ -74,5 +79,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }
