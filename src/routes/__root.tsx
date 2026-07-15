@@ -13,6 +13,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Header } from "@/components/header";
+import { ConvexReactClient } from "convex/react";
+import { ConvexAuthProvider } from "@convex-dev/auth/react";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -46,38 +48,42 @@ export const Route = createRootRouteWithContext<{
   shellComponent: RootDocument,
 });
 
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <ThemeProvider defaultTheme="system" storageKey="dark">
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="w-full">
-              <Header>
-                <SidebarTrigger />
-                <ModeToggle />
-              </Header>
-              {children}
-            </main>
-          </SidebarProvider>
-        </ThemeProvider>
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
+      <ConvexAuthProvider client={convex}>
+        <html lang="fr" suppressHydrationWarning>
+          <head>
+            <HeadContent />
+          </head>
+          <body>
+            <ThemeProvider defaultTheme="system" storageKey="dark">
+              <SidebarProvider>
+                <AppSidebar />
+                <main className="w-full">
+                  <Header>
+                    <SidebarTrigger />
+                    <ModeToggle />
+                  </Header>
+                  {children}
+                </main>
+              </SidebarProvider>
+            </ThemeProvider>
+            <TanStackDevtools
+              config={{
+                position: "bottom-right",
+              }}
+              plugins={[
+                {
+                  name: "Tanstack Router",
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+              ]}
+            />
+            <Scripts />
+          </body>
+        </html>
+      </ConvexAuthProvider>
   );
 }
