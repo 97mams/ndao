@@ -13,8 +13,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Header } from "@/components/header";
-import { ConvexReactClient } from "convex/react";
-import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import { ConvexClientProvider } from "@/components/ConvexClientProvider";
+import { getToken } from "@/lib/auth-server.ts";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -48,11 +48,11 @@ export const Route = createRootRouteWithContext<{
   shellComponent: RootDocument,
 });
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
+const token = await getToken()
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-      <ConvexAuthProvider client={convex}>
+      <ConvexClientProvider initialToken={token}>
         <html lang="fr" suppressHydrationWarning>
           <head>
             <HeadContent />
@@ -84,6 +84,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <Scripts />
           </body>
         </html>
-      </ConvexAuthProvider>
+      </ConvexClientProvider>
   );
 }
