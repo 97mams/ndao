@@ -1,16 +1,22 @@
-import { createRouter } from "@tanstack/react-router";
-import { QueryClient } from "@tanstack/react-query";
-import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
-import { ConvexQueryClient } from "@convex-dev/react-query";
-import { ConvexProvider } from "convex/react";
-import { routeTree } from "./routeTree.gen";
+import { createRouter } from '@tanstack/react-router'
+import { QueryClient } from '@tanstack/react-query'
+// You may need to install this package if you haven't already
+import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
+import { ConvexQueryClient } from '@convex-dev/react-query'
+import { routeTree } from './routeTree.gen'
 
 export function getRouter() {
-  const CONVEX_URL = (import.meta as any).env.VITE_CONVEX_URL!;
-  if (!CONVEX_URL) {
-    console.error("missing envar VITE_CONVEX_URL");
+  if (typeof document !== 'undefined') {
+    notifyManager.setScheduler(window.requestAnimationFrame)
   }
-  const convexQueryClient = new ConvexQueryClient(CONVEX_URL);
+
+  const convexUrl = (import.meta as any).env.VITE_CONVEX_URL!
+  if (!convexUrl) {
+    throw new Error('VITE_CONVEX_URL is not set')
+  }
+  const convexQueryClient = new ConvexQueryClient(convexUrl, {
+    expectAuth: true,
+  })
 
   const queryClient: QueryClient = new QueryClient({
     defaultOptions: {
@@ -19,27 +25,22 @@ export function getRouter() {
         queryFn: convexQueryClient.queryFn(),
       },
     },
-  });
-  convexQueryClient.connect(queryClient);
+  })
+  convexQueryClient.connect(queryClient)
 
   const router = createRouter({
     routeTree,
-    defaultPreload: "intent",
-    context: { queryClient },
+    defaultPreload: 'intent',
+    context: { queryClient, convexQueryClient },
     scrollRestoration: true,
-    Wrap: ({ children }) => (
-      <ConvexProvider client={convexQueryClient.convexClient}>
-        {children}
-      </ConvexProvider>
-    ),
-  });
-  setupRouterSsrQueryIntegration({ router, queryClient });
+    defaultErrorComponent: (err) => <p>{err.error.stack}</p>,
+    defaultNotFoundComponent: () => <p>not found</p>,
+  })
 
-  return router;
-}
+  setupRouterSsrQueryIntegration({
+    router,
+    queryClient,
+  })
 
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: ReturnType<typeof getRouter>;
-  }
+  return router
 }
