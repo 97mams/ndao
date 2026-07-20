@@ -8,10 +8,9 @@ export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(
-        convexQuery(api.auth.getCurrentUser, {})
+        convexQuery(api.auth.getCurrentUser, {}),
       ),
       // Load multiple queries in parallel if needed
     ]);
   },
-  
 });
