@@ -23,30 +23,50 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any);
 
+const LoginRoute = IndexRouteImport.update({
+  id: "/Login",
+  path: "/Login",
+  getParentRoute: () => rootRouteImport,
+} as any);
+
+const ProtectedRoute = IndexRouteImport.update({
+  id: "/_protected",
+  path: "/_protected",
+  getParentRoute: () => rootRouteImport,
+} as any);
+
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/Login": typeof LoginRoute;
+  "/_protected": typeof ProtectedRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/Login": typeof LoginRoute;
+  "/_protected": typeof ProtectedRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
   "/api/auth/$": typeof ApiAuthSplatRoute;
+  "/Login": typeof LoginRoute;
+  "/_protected": typeof ProtectedRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/api/auth/$";
+  fullPaths: "/" | "/api/auth/$" | "/Login" | "/_protected";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/api/auth/$";
-  id: "__root__" | "/" | "/api/auth/$";
+  to: "/" | "/api/auth/$" | "/Login" | "/_protected";
+  id: "__root__" | "/" | "/api/auth/$" | "/Login" | "/_protected";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute;
+  LoginRoute: typeof LoginRoute;
+  ProtectedRoute: typeof ProtectedRoute;
 }
 
 declare module "@tanstack/react-router" {
@@ -64,13 +84,29 @@ declare module "@tanstack/react-router" {
       fullPath: "/api/auth/$";
       preLoaderRoute: typeof ApiAuthSplatRouteImport;
       parentRoute: typeof rootRouteImport;
-    };
+    },
+    "/Login": {
+      id: "/Login";
+      path: "/Login";
+      fullPath: "/Login";
+      preLoaderRoute: typeof LoginRouteImport;
+      parentRoute: typeof rootRouteImport;
+    },
+    "/_protected": {
+      id: "/_protected";
+      path: "/_protected";
+      fullPath: "/_protected";
+      preLoaderRoute: typeof ProtectedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  LoginRoute: LoginRoute,
+  ProtectedRoute: ProtectedRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
