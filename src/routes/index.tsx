@@ -1,16 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { api } from "~/convex/_generated/api";
-import { convexQuery } from "@convex-dev/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { getSession } from '@/lib/auth.functions'
 
-export const Route = createFileRoute("/")({
-  component: App,
-  loader: async ({ context }) => {
-    await Promise.all([
-      context.queryClient.ensureQueryData(
-        convexQuery(api.auth.getCurrentUser, {}),
-      ),
-      // Load multiple queries in parallel if needed
-    ]);
+export const Route = createFileRoute('/')({
+  beforeLoad: async () => {
+    const session = await getSession();
+
+    if (!session) {
+      throw redirect({ to: "/" });
+    }
+
+    return { user: session.user };
   },
-});
+  component: IndexComponent,
+})
+
+function IndexComponent() {
+  const { user } = Route.useRouteContext();
+  
+  return <div>Welcome, {user.name}!</div>
+}
