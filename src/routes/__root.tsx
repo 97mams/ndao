@@ -14,7 +14,6 @@ import type { QueryClient } from "@tanstack/react-query";
 import appCss from "~/styles/app.css?url";
 import { authClient } from "../lib/auth-client";
 import { getToken } from "../lib/auth-server";
-import { timeLog } from "console";
 
 // Get auth information for SSR using available cookies
 const getAuth = createServerFn({ method: "GET" }).handler(async () => {
