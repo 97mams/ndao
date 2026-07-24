@@ -11,7 +11,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import type { ConvexQueryClient } from "@convex-dev/react-query";
 import type { QueryClient } from "@tanstack/react-query";
-import appCss from "~/styles/app.css?url";
+import appCss from "../styles/app.css?url";
 import { authClient } from "../lib/auth-client";
 import { getToken } from "../lib/auth-server";
 
