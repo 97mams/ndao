@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
   loader: async () => {
     const session = await getSession();
     if (!session) {
-      // redirect('/Login');
+      redirect('/Login');
     }
     return session;
   },
