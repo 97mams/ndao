@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LoginRouteImport } from './routes/Login'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -19,8 +19,8 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
-  id: '/Login',
-  path: '/Login',
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -31,26 +31,26 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/Login': typeof LoginRoute
+  '/login': typeof LoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/Login': typeof LoginRoute
+  '/login': typeof LoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/Login': typeof LoginRoute
+  '/login': typeof LoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/Login' | '/api/auth/$'
+  fullPaths: '/' | '/login' | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Login' | '/api/auth/$'
-  id: '__root__' | '/' | '/Login' | '/api/auth/$'
+  to: '/' | '/login' | '/api/auth/$'
+  id: '__root__' | '/' | '/login' | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -68,10 +68,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/Login': {
-      id: '/Login'
-      path: '/Login'
-      fullPath: '/Login'
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
