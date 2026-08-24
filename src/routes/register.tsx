@@ -1,24 +1,24 @@
 import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 import { AuthForm } from "@/components/auth-form";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/register")({
   beforeLoad: ({ context }) => {
     if (context.isAuthenticated) {
       throw redirect({ to: "/" });
     }
   },
-  component: LoginComponent,
+  component: RegisterComponent,
 });
 
-function LoginComponent() {
+function RegisterComponent() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-6">
-      <AuthForm mode="signIn" />
+      <AuthForm mode="signUp" />
       <Link
-        to="/register"
+        to="/login"
         className="text-sm text-neutral-400 hover:text-neutral-200"
       >
-        No account? Create one
+        Already have an account? Sign in
       </Link>
     </main>
   );

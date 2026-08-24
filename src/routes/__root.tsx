@@ -9,13 +9,13 @@ import {
 import * as React from "react";
 import { createServerFn } from "@tanstack/react-start";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
+import type { AuthClient } from "@convex-dev/better-auth/react";
 import type { ConvexQueryClient } from "@convex-dev/react-query";
 import type { QueryClient } from "@tanstack/react-query";
-import appCss from "../styles/app.css?url";
-import { authClient } from "../lib/auth-client";
-import { getToken } from "../lib/auth-server";
+import appCss from "@/styles/app.css?url";
+import { authClient } from "@/lib/auth-client";
+import { getToken } from "@/lib/auth-server";
 
-// Get auth information for SSR using available cookies
 const getAuth = createServerFn({ method: "GET" }).handler(async () => {
   return await getToken();
 });
@@ -32,17 +32,15 @@ export const Route = createRootRouteWithContext<{
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
   }),
   beforeLoad: async (ctx) => {
     const token = await getAuth();
 
-    // all queries, mutations and actions through TanStack Query will be
-    // authenticated during SSR if we have a valid token
+    // During SSR only, set the auth token so Convex HTTP queries
+    // are authenticated.
     if (token) {
-      // During SSR only (the only time serverHttpClient exists),
-      // set the auth token to make HTTP queries with.
       ctx.context.convexQueryClient.serverHttpClient?.setAuth(token);
     }
 
@@ -59,7 +57,7 @@ function RootComponent() {
   return (
     <ConvexBetterAuthProvider
       client={context.convexQueryClient.convexClient}
-      authClient={authClient}
+      authClient={authClient as unknown as AuthClient}
       initialToken={context.token}
     >
       <RootDocument>
@@ -75,7 +73,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-neutral-950 text-neutral-50">
+      <body className="min-h-screen bg-neutral-950 text-neutral-50 antialiased">
         {children}
         <Scripts />
       </body>
